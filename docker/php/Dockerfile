@@ -1,6 +1,8 @@
 FROM debian:bullseye
 
-RUN apt-get update & apt-get update -y
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get upgrade & apt-get update -y
 
 RUN apt-get install -y \
     git \
