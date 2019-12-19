@@ -1,5 +1,7 @@
 FROM debian:bullseye
 
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt-get upgrade & apt-get update -y
 
 RUN apt-get install -y \
