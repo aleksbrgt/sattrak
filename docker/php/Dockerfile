@@ -1,6 +1,6 @@
 FROM debian:bullseye
 
-RUN apt-get update & apt-get update -y
+RUN apt-get upgrade & apt-get update -y
 
 RUN apt-get install -y \
     git \
