@@ -55,10 +55,11 @@ class ParseLine
      * @param string $line
      * @param int $start
      * @param int $length
+     * @param bool $nullable
      *
      * @return string|null
      */
-    private function extract(string $line, int $start, int $length): ?string
+    private function extract(string $line, int $start, int $length, ?bool $nullable = true): ?string
     {
         $value = substr($line, $start, $length);
 
@@ -66,6 +67,12 @@ class ParseLine
             return null;
         }
 
-        return trim($value);
+        $value = trim($value);
+
+        if ($nullable && empty($value)) {
+            return null;
+        }
+
+        return $value;
     }
 }

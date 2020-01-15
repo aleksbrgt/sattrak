@@ -5,27 +5,24 @@ declare(strict_types=1);
 namespace Hastegan\Sattrak\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hastegan\Sattrak\Entity\Abstraction\GUIDEntityInterface;
-use Hastegan\Sattrak\Entity\Abstraction\GUIDEntityTrait;
 
 /**
  * @ORM\Entity()
  */
-class Source implements GUIDEntityInterface
+class Source
 {
-    use GUIDEntityTrait;
-
     /**
      * @var string
      *
+     * @ORM\Id()
      * @ORM\Column(type="string", length=10)
      */
     private $code;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
 
@@ -50,19 +47,19 @@ class Source implements GUIDEntityInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      *
      * @return Source
      */
-    public function setName(string $name): Source
+    public function setName(?string $name): Source
     {
         $this->name = $name;
 

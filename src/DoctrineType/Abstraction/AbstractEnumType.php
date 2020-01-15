@@ -14,21 +14,13 @@ abstract class AbstractEnumType extends Type
     /**
      * @inheritDoc
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
-    {
-        return 'SMALLINT';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if (null === $value) {
             return null;
         }
 
-        $convertedValue = $this->getEnum()->getKeyForValue($value);
+        $convertedValue = $this->getConvertedDBValue($value);
 
         if (null === $convertedValue) {
             throw new UnexpectedValueException(sprintf(
@@ -42,18 +34,15 @@ abstract class AbstractEnumType extends Type
     }
 
     /**
-     * @param mixed             $value
-     * @param AbstractPlatform  $platform
-     *
-     * @return string|null
+     * @inheritDoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?string
+    public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
             return null;
         }
 
-        $convertedValue = $this->getEnum()->getValueForKey($value);
+        $convertedValue = $this->getConvertedPHPValue($value);
 
         if (null === $convertedValue) {
             throw new UnexpectedValueException(sprintf(
@@ -67,7 +56,7 @@ abstract class AbstractEnumType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
@@ -78,4 +67,18 @@ abstract class AbstractEnumType extends Type
      * @return EnumInterface
      */
     abstract public function getEnum(): EnumInterface;
+
+    /**
+     * @param $value
+     *
+     * @return mixed|null
+     */
+    abstract protected function getConvertedDBValue($value);
+
+    /**
+     * @param $value
+     *
+     * @return mixed|null
+     */
+    abstract protected function getConvertedPHPValue($value);
 }

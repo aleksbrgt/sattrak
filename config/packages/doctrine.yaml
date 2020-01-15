@@ -6,6 +6,8 @@ doctrine:
             datasource_provider: Hastegan\Sattrak\DoctrineType\DataSourceProviderType
             datasource_status: Hastegan\Sattrak\DoctrineType\DataSourceStatusType
             datasource_type: Hastegan\Sattrak\DoctrineType\DataSourceTypeType
+            catalog_entry_orbital_status: Hastegan\Sattrak\DoctrineType\CatalogEntryOrbitalStatusType
+            catalog_entry_operational_status: Hastegan\Sattrak\DoctrineType\CatalogEntryOperationalStatusType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

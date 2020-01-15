@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Hastegan\Sattrak\DoctrineType;
 
-use Hastegan\Sattrak\DoctrineType\Abstraction\AbstractIntEnumTypeType;
+use Hastegan\Sattrak\DoctrineType\Abstraction\AbstractVarCharEnumType;
 use Hastegan\Sattrak\Enum\Abstraction\EnumInterface;
-use Hastegan\Sattrak\Enum\DataSourceTypeEnum;
+use Hastegan\Sattrak\Enum\CatalogEntryOrbitalStatusEnum;
 
-class DataSourceTypeType extends AbstractIntEnumTypeType
+class CatalogEntryOrbitalStatusType extends AbstractVarCharEnumType
 {
     /**
      * @inheritDoc
      */
     public function getEnum(): EnumInterface
     {
-        return new DataSourceTypeEnum();
+        return new CatalogEntryOrbitalStatusEnum();
     }
 
     /**
@@ -23,6 +23,6 @@ class DataSourceTypeType extends AbstractIntEnumTypeType
      */
     public function getName()
     {
-        return 'datasource_type';
+        return 'catalog_entry_orbital_status';
     }
 }

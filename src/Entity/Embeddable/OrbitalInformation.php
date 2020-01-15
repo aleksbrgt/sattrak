@@ -17,7 +17,7 @@ class OrbitalInformation
      * @ORM\Column(
      *     type="decimal",
      *     precision=6,
-     *     scale=5,
+     *     scale=1,
      *     nullable=true,
      *     name="orbital_period"
      * )
@@ -51,7 +51,7 @@ class OrbitalInformation
     private $perigee;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(
      *     type="decimal",
@@ -144,19 +144,19 @@ class OrbitalInformation
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRadarCrossSection(): string
+    public function getRadarCrossSection(): ?string
     {
         return $this->radarCrossSection;
     }
 
     /**
-     * @param string $radarCrossSection
+     * @param string|null $radarCrossSection
      *
      * @return OrbitalInformation
      */
-    public function setRadarCrossSection(string $radarCrossSection): OrbitalInformation
+    public function setRadarCrossSection(?string $radarCrossSection): OrbitalInformation
     {
         $this->radarCrossSection = $radarCrossSection;
 

@@ -39,21 +39,22 @@ class CatalogEntryDTO
     /**
      * @var bool|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type("boolean")
      */
     private $hasPayload;
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $operationalStatus;
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $source;
 
@@ -67,7 +68,7 @@ class CatalogEntryDTO
     /**
      * @var string|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $launchSite;
 
@@ -81,36 +82,35 @@ class CatalogEntryDTO
     /**
      * @var string|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $orbitalStatus;
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $orbitalPeriod;
-
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $inclination;
 
     /**
      * @var int|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $apogee;
 
     /**
      * @var int|null
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(allowNull=true)
      */
     private $perigee;
 

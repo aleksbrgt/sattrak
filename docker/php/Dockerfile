@@ -10,7 +10,8 @@ RUN apt-get install -y \
     php7.3 \
     php-fpm \
     php-pgsql \
-    php-dev
+    php-dev \
+    php-mbstring
 
 WORKDIR /tmp
 

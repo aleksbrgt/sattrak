@@ -29,9 +29,9 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", unique=true, name="internal_designator")
+     * @ORM\Column(type="string", unique=true, name="international_designator")
      */
-    private $internalDesignator;
+    private $internationalDesignator;
 
     /**
      * @var string
@@ -55,18 +55,17 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     private $hasPayload;
 
     /**
-     * @var OperationalStatus
+     * @var string|null
      *
-     * @ORM\ManyToOne(targetEntity=OrbitalStatus::class)
-     * @ORM\JoinColumn(name="orbital_status_id", nullable=false)
+     * @ORM\Column(type="catalog_entry_operational_status", nullable=true)
      */
     private $operationalStatus;
 
     /**
-     * @var Source
+     * @var Source|null
      *
-     * @ORM\ManyToOne(targetEntity=Source::class)
-     * @ORM\JoinColumn(name="source_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Source::class, cascade={"persist"})
+     * @ORM\JoinColumn(name="source_code", nullable=true, referencedColumnName="code")
      */
     private $source;
 
@@ -79,8 +78,8 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     /**
      * @var LaunchSite
      *
-     * @ORM\ManyToOne(targetEntity=LaunchSite::class)
-     * @ORM\JoinColumn(name="launch_site_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity=LaunchSite::class, cascade={"persist"})
+     * @ORM\JoinColumn(name="launch_site_code", nullable=false, referencedColumnName="code")
      */
     private $launchSite;
 
@@ -92,10 +91,9 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     private $decayDate;
 
     /**
-     * @var OrbitalStatus
+     * @var string|null
      *
-     * @ORM\ManyToOne(targetEntity=OrbitalStatus::class)
-     * @ORM\JoinColumn(name="orbital_status_id", nullable=false)
+     * @ORM\Column(type="catalog_entry_orbital_status", nullable=true)
      */
     private $orbitalStatus;
 
@@ -134,19 +132,19 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     /**
      * @return string
      */
-    public function getInternalDesignator(): string
+    public function getInternationalDesignator(): string
     {
-        return $this->internalDesignator;
+        return $this->internationalDesignator;
     }
 
     /**
-     * @param string $internalDesignator
+     * @param string $internationalDesignator
      *
      * @return CatalogEntry
      */
-    public function setInternalDesignator(string $internalDesignator): CatalogEntry
+    public function setInternationalDesignator(string $internationalDesignator): CatalogEntry
     {
-        $this->internalDesignator = $internalDesignator;
+        $this->internationalDesignator = $internationalDesignator;
 
         return $this;
     }
@@ -194,7 +192,7 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     /**
      * @return bool
      */
-    public function isHasPayload(): bool
+    public function hasPayload(): bool
     {
         return $this->hasPayload;
     }
@@ -212,19 +210,19 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     }
 
     /**
-     * @return OperationalStatus
+     * @return string|null
      */
-    public function getOperationalStatus(): OperationalStatus
+    public function getOperationalStatus(): ?string
     {
         return $this->operationalStatus;
     }
 
     /**
-     * @param OperationalStatus $operationalStatus
+     * @param string|null $operationalStatus
      *
      * @return CatalogEntry
      */
-    public function setOperationalStatus(OperationalStatus $operationalStatus): CatalogEntry
+    public function setOperationalStatus(?string $operationalStatus): CatalogEntry
     {
         $this->operationalStatus = $operationalStatus;
 
@@ -232,19 +230,19 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     }
 
     /**
-     * @return Source
+     * @return Source|null
      */
-    public function getSource(): Source
+    public function getSource(): ?Source
     {
         return $this->source;
     }
 
     /**
-     * @param Source $source
+     * @param Source|null $source
      *
      * @return CatalogEntry
      */
-    public function setSource(Source $source): CatalogEntry
+    public function setSource(?Source $source): CatalogEntry
     {
         $this->source = $source;
 
@@ -312,19 +310,19 @@ class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
     }
 
     /**
-     * @return OrbitalStatus
+     * @return string|null
      */
-    public function getOrbitalStatus(): OrbitalStatus
+    public function getOrbitalStatus(): ?string
     {
         return $this->orbitalStatus;
     }
 
     /**
-     * @param OrbitalStatus $orbitalStatus
+     * @param string|null $orbitalStatus
      *
      * @return CatalogEntry
      */
-    public function setOrbitalStatus(OrbitalStatus $orbitalStatus): CatalogEntry
+    public function setOrbitalStatus(?string $orbitalStatus): CatalogEntry
     {
         $this->orbitalStatus = $orbitalStatus;
 
