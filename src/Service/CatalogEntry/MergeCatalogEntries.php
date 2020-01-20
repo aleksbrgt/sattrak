@@ -16,14 +16,24 @@ class MergeCatalogEntries
      */
     public function merge(CatalogEntry $catalogEntry, CatalogEntry $newEntry): CatalogEntry
     {
-        return $catalogEntry
+        $catalogEntry
             ->setRaw($newEntry->getRaw())
             ->setNames($newEntry->getNames())
             ->setHasPayload($newEntry->hasPayload())
+            ->setSource($newEntry->getSource())
             ->setOperationalStatus($newEntry->getOperationalStatus())
-            ->setDecayDate($newEntry->getDecayDate())
             ->setOrbitalStatus($newEntry->getOrbitalStatus())
             ->setOrbitalInformation($newEntry->getOrbitalInformation())
         ;
+
+        if (null === $newEntry->getDecayDate()
+            || $newEntry->getDecayDate() !== $catalogEntry->getDecayDate()
+        ) {
+            return $catalogEntry;
+        }
+
+        $catalogEntry->setDecayDate($newEntry->getDecayDate());
+
+        return $catalogEntry;
     }
 }

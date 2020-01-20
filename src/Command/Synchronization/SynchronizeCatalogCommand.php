@@ -120,8 +120,6 @@ class SynchronizeCatalogCommand extends Command
             try {
                 $catalogEntry = $this->catalogEntryBuilder->build($dto);
             } catch (Throwable $exception) {
-                dump($dto);
-
                 throw new $exception;
             }
 
