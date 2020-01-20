@@ -11,6 +11,7 @@ use Hastegan\Sattrak\Service\CatalogEntry\MergeCatalogEntries;
 use Hastegan\Sattrak\Service\EntityBuilder\CatalogEntryEntityBuilder;
 use Hastegan\Sattrak\Service\Synchronization\CatalogEntry\ParseLine;
 use Hastegan\Sattrak\Service\Synchronization\Reader\ReaderFactory;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,6 +51,9 @@ class SynchronizeCatalogCommand extends Command
     /** @var ValidatorInterface */
     private $validator;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /** @var int */
     private $clearBatchSize = 500;
 
@@ -59,7 +63,8 @@ class SynchronizeCatalogCommand extends Command
         CatalogEntryEntityBuilder $catalogEntryBuilder,
         EntityManagerInterface $entityManager,
         MergeCatalogEntries $mergeCatalogEntries,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        LoggerInterface $logger
     ) {
         parent::__construct();
 
@@ -70,6 +75,7 @@ class SynchronizeCatalogCommand extends Command
         $this->catalogEntryRepository = $entityManager->getRepository(CatalogEntry::class);
         $this->mergeCatalogEntries = $mergeCatalogEntries;
         $this->validator = $validator;
+        $this->logger = $logger;
     }
 
     /**
@@ -108,11 +114,15 @@ class SynchronizeCatalogCommand extends Command
 
         foreach ($reader->read($this->path) as $line) {
             $dto = $this->lineParser->parse($line);
-
             $violations = $this->validator->validate($dto);
 
             if ($violations->count()) {
                 $this->io->write('E');
+
+                $this->logger->error(
+                    sprintf('Error while syncing satcat entry "%s"', $line),
+                    ['violations' => $violations]
+                );
 
                 continue;
             }
@@ -139,6 +149,9 @@ class SynchronizeCatalogCommand extends Command
 
         $this->io->newLine();
 
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
         return 0;
     }
 
@@ -154,13 +167,19 @@ class SynchronizeCatalogCommand extends Command
         ]);
 
         if (!$persistedEntry instanceof CatalogEntry) {
-            $this->entityManager->persist($catalogEntry);
+            $this->logger->info(sprintf('New satcat entry "%s"', $catalogEntry->getRaw()));
 
             return $catalogEntry;
         }
 
-        $persistedEntry = $this->mergeCatalogEntries->merge($persistedEntry, $catalogEntry);
+        if ($persistedEntry->getRaw() === $catalogEntry->getRaw()) {
+            $this->logger->info(sprintf('Satcat entry did not change "%s"', $catalogEntry->getRaw()));
 
-        return $persistedEntry;
+            return $persistedEntry;
+        }
+
+        $this->logger->info(sprintf('Satcat entry has changed "%s"', $catalogEntry->getRaw()));
+
+        return $this->mergeCatalogEntries->merge($persistedEntry, $catalogEntry);
     }
 }
