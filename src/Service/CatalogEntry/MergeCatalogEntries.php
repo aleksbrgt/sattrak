@@ -27,13 +27,11 @@ class MergeCatalogEntries
         ;
 
         if (null === $newEntry->getDecayDate()
-            || $newEntry->getDecayDate() !== $catalogEntry->getDecayDate()
+            || $newEntry->getDecayDate() === $catalogEntry->getDecayDate()
         ) {
             return $catalogEntry;
         }
 
-        $catalogEntry->setDecayDate($newEntry->getDecayDate());
-
-        return $catalogEntry;
+        return $catalogEntry->setDecayDate($newEntry->getDecayDate());
     }
 }
