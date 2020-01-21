@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hastegan\Sattrak\Command\Synchronization;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Hastegan\Sattrak\Command\Abstraction\AbstractTrackCommand;
 use Hastegan\Sattrak\Entity\CatalogEntry;
 use Hastegan\Sattrak\Repository\CatalogEntryRepository;
 use Hastegan\Sattrak\Service\CatalogEntry\MergeCatalogEntries;
@@ -12,15 +13,13 @@ use Hastegan\Sattrak\Service\EntityBuilder\CatalogEntryEntityBuilder;
 use Hastegan\Sattrak\Service\Synchronization\CatalogEntry\ParseLine;
 use Hastegan\Sattrak\Service\Synchronization\Reader\ReaderFactory;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Throwable;
 
-class SynchronizeCatalogCommand extends Command
+class SynchronizeCatalogCommand extends AbstractTrackCommand
 {
     protected static $defaultName = 'app:sync:catalog';
 
@@ -104,6 +103,18 @@ class SynchronizeCatalogCommand extends Command
     /**
      * @inheritDoc
      */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        if (null !== $this->path) {
+            return;
+        }
+
+        $this->path = $this->io->ask('SatCat path');
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->io->title('Synchronize Catalog');
@@ -127,12 +138,7 @@ class SynchronizeCatalogCommand extends Command
                 continue;
             }
 
-            try {
-                $catalogEntry = $this->catalogEntryBuilder->build($dto);
-            } catch (Throwable $exception) {
-                throw new $exception;
-            }
-
+            $catalogEntry = $this->catalogEntryBuilder->build($dto);
             $catalogEntry = $this->getPersisted($catalogEntry);
 
             if (!$this->entityManager->contains($catalogEntry)) {
@@ -150,7 +156,6 @@ class SynchronizeCatalogCommand extends Command
         $this->io->newLine();
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         return 0;
     }
