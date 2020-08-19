@@ -36,13 +36,13 @@ class SynchronizeCatalogCommand extends AbstractTrackCommand
     private $lineParser;
 
     /** @var CatalogEntryEntityBuilder */
-    private $catalogEntryBuilder;
+    private $catEntryBuilder;
 
     /** @var EntityManagerInterface */
     private $entityManager;
 
     /** @var CatalogEntryRepository */
-    private $catalogEntryRepository;
+    private $catEntryRepository;
 
     /** @var MergeCatalogEntries */
     private $mergeCatalogEntries;
@@ -59,8 +59,9 @@ class SynchronizeCatalogCommand extends AbstractTrackCommand
     public function __construct(
         ReaderFactory $readerFactory,
         ParseLine $lineParser,
-        CatalogEntryEntityBuilder $catalogEntryBuilder,
+        CatalogEntryEntityBuilder $catEntryBuilder,
         EntityManagerInterface $entityManager,
+        CatalogEntryRepository $catEntryRepository,
         MergeCatalogEntries $mergeCatalogEntries,
         ValidatorInterface $validator,
         LoggerInterface $logger
@@ -69,9 +70,9 @@ class SynchronizeCatalogCommand extends AbstractTrackCommand
 
         $this->readerFactory = $readerFactory;
         $this->lineParser = $lineParser;
-        $this->catalogEntryBuilder = $catalogEntryBuilder;
+        $this->catEntryBuilder = $catEntryBuilder;
         $this->entityManager = $entityManager;
-        $this->catalogEntryRepository = $entityManager->getRepository(CatalogEntry::class);
+        $this->catEntryRepository = $catEntryRepository;
         $this->mergeCatalogEntries = $mergeCatalogEntries;
         $this->validator = $validator;
         $this->logger = $logger;
@@ -138,7 +139,7 @@ class SynchronizeCatalogCommand extends AbstractTrackCommand
                 continue;
             }
 
-            $catalogEntry = $this->catalogEntryBuilder->build($dto);
+            $catalogEntry = $this->catEntryBuilder->build($dto);
             $catalogEntry = $this->getPersisted($catalogEntry);
 
             if (!$this->entityManager->contains($catalogEntry)) {
@@ -167,7 +168,7 @@ class SynchronizeCatalogCommand extends AbstractTrackCommand
      */
     private function getPersisted(CatalogEntry $catalogEntry): CatalogEntry
     {
-        $persistedEntry = $this->catalogEntryRepository->findOneBy([
+        $persistedEntry = $this->catEntryRepository->findOneBy([
             'noradCatalogNumber' => $catalogEntry->getNoradCatalogNumber()
         ]);
 

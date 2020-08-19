@@ -14,6 +14,8 @@ use Hastegan\Sattrak\Entity\Embeddable\OrbitalInformation;
 
 /**
  * @ORM\Entity()
+ *
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class CatalogEntry implements GUIDEntityInterface, TimestampedEntityInterface
 {

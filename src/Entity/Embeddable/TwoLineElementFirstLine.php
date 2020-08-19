@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Embeddable()
+ *
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class TwoLineElementFirstLine
 {

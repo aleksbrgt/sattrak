@@ -16,12 +16,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class TrackCommandSubscriber implements EventSubscriberInterface
 {
     /** @var CommandHistoryHandler */
-    private $commandHistoryHandler;
+    private $historyHandler;
 
     public function __construct(
-        CommandHistoryHandler $commandHistoryHandler
+        CommandHistoryHandler $historyHandler
     ) {
-        $this->commandHistoryHandler = $commandHistoryHandler;
+        $this->historyHandler = $historyHandler;
     }
 
     /**
@@ -49,7 +49,7 @@ class TrackCommandSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $commandHistory = $this->commandHistoryHandler->create($event);
+        $commandHistory = $this->historyHandler->create($event);
         $command->setCommandHistory($commandHistory);
     }
 
@@ -66,7 +66,7 @@ class TrackCommandSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->commandHistoryHandler->updateOnTermination(
+        $this->historyHandler->updateOnTermination(
             $command->getCommandHistory(),
             $event
         );
@@ -85,6 +85,6 @@ class TrackCommandSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->commandHistoryHandler->updateOnError($command->getCommandHistory(), $event);
+        $this->historyHandler->updateOnError($command->getCommandHistory(), $event);
     }
 }
