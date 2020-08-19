@@ -1,0 +1,19 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/php:7.3-cli
+    working_directory: ~/src
+    steps:
+      - checkout
+      - run: sudo composer self-update
+      - run: composer install -n --prefer-dist
+      - run: bin/phpunit
+      - run: vendor/bin/phpmd src/ text phpmd.xml cleancode,codesize,controversial,design,naming,unusedcode --exclude src/Migrations/
+
+workflows:
+  version: 2.1
+  build_and_test:
+    jobs:
+      - test
